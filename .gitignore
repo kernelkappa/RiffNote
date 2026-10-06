@@ -1,3 +1,16 @@
+# IDE
 *.iml
 .idea/
 .Claude/
+
+# macOS
+.DS_Store
+
+# Flutter/Dart/Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+migrate_working_dir/
