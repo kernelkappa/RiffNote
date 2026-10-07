@@ -3,13 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:record/record.dart';
 
 import '../models/recording.dart';
+import '../services/basic_pitch/basic_pitch_constants.dart' as basic_pitch;
 import '../services/recording_repository.dart';
 import '../widgets/recording_tile.dart';
 
 /// Home screen: record a new take and browse past recordings.
 ///
-/// This is step 1 of the roadmap in the project brief: audio capture and
-/// local storage only. Transcription (Basic Pitch) comes next.
+/// Step 1 of the roadmap in the project brief (audio capture and local
+/// storage) plus step 2 (on-device transcription via [RecordingTile]'s
+/// "Trascrivi" action).
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -63,7 +65,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     final path = await _repository.newRecordingPath();
-    await _recorder.start(const RecordConfig(encoder: AudioEncoder.aacLc), path: path);
+    // WAV PCM16 mono @ 22050 Hz: exactly the format Basic Pitch's model
+    // expects, so transcription never has to decode or resample audio.
+    await _recorder.start(
+      const RecordConfig(
+        encoder: AudioEncoder.wav,
+        sampleRate: basic_pitch.audioSampleRate,
+        numChannels: 1,
+      ),
+      path: path,
+    );
 
     setState(() {
       _isRecording = true;

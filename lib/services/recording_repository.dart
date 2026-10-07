@@ -24,7 +24,7 @@ class RecordingRepository {
 
   /// Builds a fresh, timestamped file path for a new recording.
   /// Does not create the file: the recorder itself writes to this path.
-  Future<String> newRecordingPath({String extension = 'm4a'}) async {
+  Future<String> newRecordingPath({String extension = 'wav'}) async {
     final dir = await _recordingsDir();
     final timestamp = DateTime.now().toIso8601String().replaceAll(
       RegExp(r'[:.]'),
