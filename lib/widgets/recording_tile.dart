@@ -5,6 +5,7 @@ import 'package:path/path.dart' as p;
 import '../models/recording.dart';
 import '../screens/home_screen.dart' show recordingDateFormat;
 import '../screens/transcribe_screen.dart';
+import 'instrument_picker.dart';
 
 /// A single row in the recordings list: play/stop, timestamp, delete.
 class RecordingTile extends StatefulWidget {
@@ -62,17 +63,26 @@ class _RecordingTileState extends State<RecordingTile> {
           IconButton(
             icon: const Icon(Icons.graphic_eq),
             tooltip: 'Trascrivi',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => TranscribeScreen(recording: widget.recording),
-              ),
-            ),
+            onPressed: () => _startTranscription(context),
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             onPressed: () => _confirmDelete(context),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _startTranscription(BuildContext context) async {
+    final instrument = await pickInstrument(context);
+    if (instrument == null || !context.mounted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => TranscribeScreen(
+          recording: widget.recording,
+          instrument: instrument,
+        ),
       ),
     );
   }
