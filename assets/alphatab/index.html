@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>RiffNote tab</title>
+  <style>
+    html, body { margin: 0; padding: 0; background: #ffffff; }
+    #alphaTab-surface { width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="alphaTab-surface"></div>
+
+  <!-- Vendored locally (assets/alphatab/) — everything renders fully
+       offline, no CDN, per the project brief's "tutto locale" constraint. -->
+  <script src="alphaTab.min.js"></script>
+  <script>
+    var element = document.getElementById('alphaTab-surface');
+    var api = new alphaTab.AlphaTabApi(element, {
+      core: {
+        fontDirectory: 'font/',
+        engine: 'svg',
+        // Workers need Blob/worker support that's flaky inside mobile
+        // WebViews; rendering a short riff synchronously is cheap enough
+        // to not need background rendering anyway.
+        useWorkers: false
+      },
+      display: {
+        layoutMode: 'page',
+        staveProfile: 'tab'
+      }
+    });
+
+    api.error.on(function (error) {
+      if (window.RiffNoteAlphaTab) {
+        window.RiffNoteAlphaTab.postMessage('error: ' + error);
+      }
+    });
+    api.renderFinished.on(function () {
+      if (window.RiffNoteAlphaTab) {
+        window.RiffNoteAlphaTab.postMessage('rendered');
+      }
+    });
+
+    // Called from Flutter via runJavaScript with a JSON-encoded alphaTex
+    // string, e.g. renderTex("\\title ... . 3.3.4 0.6.4 |").
+    window.renderTex = function (tex) {
+      try {
+        api.tex(tex);
+      } catch (e) {
+        if (window.RiffNoteAlphaTab) {
+          window.RiffNoteAlphaTab.postMessage('error: ' + e);
+        }
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import '../music/note_naming.dart';
 import 'basic_pitch_constants.dart' as c;
 import 'basic_pitch_model.dart';
 
@@ -25,16 +26,8 @@ class DetectedNote {
 
   double get durationSec => endTimeSec - startTimeSec;
 
-  static const _noteNames = [
-    'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
-  ];
-
   /// e.g. 69 -> "A4".
-  String get noteName {
-    final octave = (midiPitch ~/ 12) - 1;
-    final name = _noteNames[midiPitch % 12];
-    return '$name$octave';
-  }
+  String get noteName => midiToNoteName(midiPitch);
 }
 
 /// Faithful Dart port of `basic_pitch.note_creation`'s polyphonic note

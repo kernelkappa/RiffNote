@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.20.3
   path: ^1.9.1
   tflite_flutter: ^0.12.1
+  webview_flutter: ^4.14.1
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,8 @@ flutter:
 
   assets:
     - assets/models/basic_pitch_nmp.tflite
+    - assets/alphatab/
+    - assets/alphatab/font/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

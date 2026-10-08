@@ -5,6 +5,7 @@ import '../models/recording.dart';
 import '../services/basic_pitch/basic_pitch_service.dart';
 import '../services/tab/chord_event.dart';
 import '../services/tab/string_fret_assigner.dart';
+import 'tab_screen.dart';
 
 /// Shows the notes Basic Pitch detects in a recording, grouped into chord
 /// events and — for guitar/bass — with a string/fret position per note.
@@ -62,6 +63,31 @@ class _TranscribeScreenState extends State<TranscribeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Note rilevate · ${widget.instrument.label}'),
+        actions: [
+          if (_tuning != null)
+            FutureBuilder<List<ChordEvent>>(
+              future: _eventsFuture,
+              builder: (context, snapshot) {
+                final events = snapshot.data;
+                if (events == null || events.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+                return IconButton(
+                  icon: const Icon(Icons.piano),
+                  tooltip: 'Mostra tab',
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => TabScreen(
+                        events: events,
+                        tuning: _tuning!,
+                        title: widget.instrument.label,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+        ],
       ),
       body: FutureBuilder<List<ChordEvent>>(
         future: _eventsFuture,
