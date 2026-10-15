@@ -105,7 +105,8 @@ void main() {
   group('StringTuning.forInstrument', () {
     test('returns null for voice and winds', () {
       expect(StringTuning.forInstrument(Instrument.voice), isNull);
-      expect(StringTuning.forInstrument(Instrument.winds), isNull);
+      expect(StringTuning.forInstrument(Instrument.flute), isNull);
+      expect(StringTuning.forInstrument(Instrument.saxAlto), isNull);
     });
 
     test('returns the right string count for guitar and bass', () {

@@ -27,8 +27,10 @@
         useWorkers: false
       },
       display: {
-        layoutMode: 'page',
-        staveProfile: 'tab'
+        layoutMode: 'page'
+        // staveProfile is intentionally NOT set here: each generated
+        // alphaTex score declares its own `\staff{...}` (score+tabs for
+        // guitar/bass, score only for voice/winds), which takes precedence.
       }
     });
 

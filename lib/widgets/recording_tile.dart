@@ -4,7 +4,7 @@ import 'package:path/path.dart' as p;
 
 import '../models/recording.dart';
 import '../screens/home_screen.dart' show recordingDateFormat;
-import '../screens/transcribe_screen.dart';
+import '../screens/score_screen.dart';
 import 'instrument_picker.dart';
 
 /// A single row in the recordings list: play/stop, timestamp, delete.
@@ -79,7 +79,7 @@ class _RecordingTileState extends State<RecordingTile> {
     if (instrument == null || !context.mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => TranscribeScreen(
+        builder: (_) => ScoreScreen(
           recording: widget.recording,
           instrument: instrument,
         ),
